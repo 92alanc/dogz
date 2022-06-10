@@ -1,7 +1,7 @@
 package com.alancamargo.lystchallenge
 
 import android.app.Application
-import com.alancamargo.lystchallenge.core.arch.di.KoinAppDeclarationProvider
+import com.alancamargo.lystchallenge.di.KoinAppDeclarationProvider
 import org.koin.core.context.startKoin
 
 class App : Application() {

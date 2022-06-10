@@ -3,6 +3,7 @@ package com.alancamargo.lystchallenge.core.di
 import androidx.room.Room
 import com.alancamargo.lystchallenge.core.arch.di.FeatureModule
 import com.alancamargo.lystchallenge.core.db.DatabaseProvider
+import com.alancamargo.lystchallenge.core.network.HttpClient
 import com.alancamargo.lystchallenge.core.tools.ErrorLogger
 import com.alancamargo.lystchallenge.core.tools.ErrorLoggerImpl
 import org.koin.android.ext.koin.androidContext
@@ -19,6 +20,7 @@ class CoreModule : FeatureModule() {
             ).fallbackToDestructiveMigration().build()
         }
 
+        factory { HttpClient() }
         factory<ErrorLogger> { ErrorLoggerImpl() }
     }
 
