@@ -5,6 +5,12 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.21' apply false
 }
 
+ext {
+    coroutines_version = '1.6.1'
+    koin_version = '3.1.0'
+    room_version = '2.4.2'
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
