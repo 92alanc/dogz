@@ -8,6 +8,8 @@ import com.alancamargo.lystchallenge.features.doglist.data.remote.DogRemoteDataS
 import com.alancamargo.lystchallenge.features.doglist.data.repository.DogRepositoryImpl
 import com.alancamargo.lystchallenge.features.doglist.domain.repository.DogRepository
 import com.alancamargo.lystchallenge.features.doglist.domain.usecase.GetDogsUseCase
+import com.alancamargo.lystchallenge.features.doglist.ui.viewmodel.DogListViewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 class DogListModule : FeatureModule() {
@@ -20,6 +22,10 @@ class DogListModule : FeatureModule() {
     override val data = module {
         factory { get<HttpClient>().getService(DogService::class.java) }
         factory<DogRemoteDataSource> { DogRemoteDataSourceImpl(service = get()) }
+    }
+
+    override val ui = module {
+        viewModel { DogListViewModel(getDogsUseCase = get(), errorLogger = get()) }
     }
 
 }

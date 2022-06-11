@@ -2,7 +2,9 @@ package com.alancamargo.lystchallenge.testtools
 
 import com.alancamargo.lystchallenge.features.doglist.data.model.DogResponse
 import com.alancamargo.lystchallenge.features.doglist.data.model.ImageResponse
+import com.alancamargo.lystchallenge.features.doglist.domain.mapping.toUi
 import com.alancamargo.lystchallenge.features.doglist.domain.model.Dog
+import com.alancamargo.lystchallenge.features.doglist.ui.model.UiDog
 
 fun stubDogList() = listOf(
     Dog(
@@ -40,4 +42,15 @@ fun stubDogResponseList() = listOf(
         origin = "Gated communities, inside posh women's purses, etc.",
         wikipediaUrl = "https://fakepedia.com/pinscher"
     )
+)
+
+fun stubUiDogList() = stubDogList().map { it.toUi() }
+
+fun stubUiDog() = UiDog(
+    id = "456",
+    breed = "Pinscher",
+    imageUrl = "https://test.com/pinscher.png",
+    temperament = "Very cocky, especially around huge dogs that could easily tear them apart",
+    origin = "Gated communities, inside posh women's purses, etc.",
+    wikipediaUrl = "https://fakepedia.com/pinscher"
 )

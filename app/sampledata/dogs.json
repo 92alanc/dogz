@@ -1,0 +1,28 @@
+{
+  "data": [
+    {
+      "breed": "Staffordshire Terrier"
+    },
+    {
+      "breed": "Pinscher"
+    },
+    {
+      "breed": "Poodle"
+    },
+    {
+      "breed": "Bulldog"
+    },
+    {
+      "breed": "Rottweiler"
+    },
+    {
+      "breed": "Dobermann"
+    },
+    {
+      "breed": "Chihuahua"
+    },
+    {
+      "breed": "Pit Bull"
+    }
+  ]
+}
