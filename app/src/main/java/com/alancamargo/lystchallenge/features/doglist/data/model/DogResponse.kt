@@ -8,7 +8,7 @@ data class DogResponse(
     @SerialName("id") val id: Long,
     @SerialName("name") val breed: String,
     @SerialName("image") val image: ImageResponse,
-    @SerialName("temperament") val temperament: String,
-    @SerialName("origin") val origin: String,
-    @SerialName("wikipedia_url") val wikipediaUrl: String
+    @SerialName("temperament") val temperament: String? = null,
+    @SerialName("origin") val origin: String? = null,
+    @SerialName("wikipedia_url") val wikipediaUrl: String? = null
 )

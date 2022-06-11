@@ -19,9 +19,12 @@ class HttpClient {
 
     fun <T> getService(serviceClass: Class<T>): T {
         val mediaType = MEDIA_TYPE.toMediaType()
+        val converterFactory = Json {
+            ignoreUnknownKeys = true
+        }.asConverterFactory(mediaType)
 
         return Retrofit.Builder()
-            .addConverterFactory(Json.asConverterFactory(mediaType))
+            .addConverterFactory(converterFactory)
             .baseUrl(BuildConfig.BASE_URL)
             .client(getClient())
             .build()

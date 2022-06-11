@@ -19,7 +19,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "API_KEY", "\"${api_key}\""
-        buildConfigField "String", "BASE_URL", "\"https://thedogapi.com\""
+        buildConfigField "String", "BASE_URL", "\"https://api.thedogapi.com\""
     }
 
     buildTypes {

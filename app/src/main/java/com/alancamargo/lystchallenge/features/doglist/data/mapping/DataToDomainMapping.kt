@@ -7,7 +7,7 @@ fun DogResponse.toDomain() = Dog(
     id = id.toString(),
     breed = breed,
     imageUrl = image.url,
-    temperament = temperament,
-    origin = origin,
-    wikipediaUrl = wikipediaUrl
+    temperament = temperament.orEmpty(),
+    origin = origin.orEmpty(),
+    wikipediaUrl = wikipediaUrl.orEmpty()
 )
