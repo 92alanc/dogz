@@ -1,7 +1,7 @@
-package com.alancamargo.lystchallenge.features.doglist.domain.usecase
+package com.alancamargo.lystchallenge.features.doglist.data.repository
 
 import app.cash.turbine.test
-import com.alancamargo.lystchallenge.features.doglist.domain.repository.DogRepository
+import com.alancamargo.lystchallenge.features.doglist.data.remote.DogRemoteDataSource
 import com.alancamargo.lystchallenge.testtools.stubDogList
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
@@ -12,19 +12,19 @@ import org.junit.Test
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
-class GetDogsUseCaseTest {
+class DogRepositoryImplTest {
 
-    private val mockRepository = mockk<DogRepository>()
-    private val useCase = GetDogsUseCase(mockRepository)
+    private val mockRemoteDataSource = mockk<DogRemoteDataSource>()
+    private val repository = DogRepositoryImpl(mockRemoteDataSource)
 
     @Test
-    fun `invoke should return dogs from repository`() = runBlocking {
+    fun `getDogs should return dogs from remote data source`() = runBlocking {
         // Given
         val expected = stubDogList()
-        every { mockRepository.getDogs() } returns flowOf(expected)
+        every { mockRemoteDataSource.getDogs() } returns flowOf(expected)
 
         // When
-        val result = useCase()
+        val result = repository.getDogs()
 
         // Then
         result.test {
