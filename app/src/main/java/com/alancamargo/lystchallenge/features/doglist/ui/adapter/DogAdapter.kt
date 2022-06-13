@@ -12,7 +12,7 @@ class DogAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DogViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemDogBinding.inflate(inflater)
+        val binding = ItemDogBinding.inflate(inflater, parent, false)
         return DogViewHolder(binding, onItemClick)
     }
 
