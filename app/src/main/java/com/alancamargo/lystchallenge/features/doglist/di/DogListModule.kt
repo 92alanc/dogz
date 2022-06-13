@@ -19,7 +19,12 @@ class DogListModule : FeatureModule() {
 
     override val domain = module {
         factory { GetDogsUseCase(repository = get()) }
-        factory<DogRepository> { DogRepositoryImpl(remoteDataSource = get()) }
+        factory<DogRepository> {
+            DogRepositoryImpl(
+                remoteDataSource = get(),
+                localDataSource = get()
+            )
+        }
     }
 
     override val data = module {

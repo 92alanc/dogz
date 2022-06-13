@@ -9,12 +9,11 @@ import kotlinx.coroutines.flow.flow
 
 class DogLocalDataSourceImpl(private val database: DogDao) : DogLocalDataSource {
 
-    override fun getDogs(): Flow<List<Dog>> = flow {
-        val dogs = database.getDogs().map { it.toDomain() }
-        emit(dogs)
+    override suspend fun getDogs(): List<Dog> {
+        return database.getDogs().map { it.toDomain() }
     }
 
-    override fun saveDogs(dogs: List<Dog>): Flow<Unit> = flow {
+    override suspend fun saveDogs(dogs: List<Dog>) {
         dogs.forEach { dog ->
             val dbDog = database.getDog(dog.id)
             if (dbDog != null) {
@@ -23,8 +22,6 @@ class DogLocalDataSourceImpl(private val database: DogDao) : DogLocalDataSource 
                 database.insertDog(dog.toDb())
             }
         }
-
-        emit(Unit)
     }
 
     override fun clearCache(): Flow<Unit> = flow {

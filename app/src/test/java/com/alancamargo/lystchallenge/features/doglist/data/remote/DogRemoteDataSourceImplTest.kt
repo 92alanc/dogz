@@ -1,6 +1,5 @@
 package com.alancamargo.lystchallenge.features.doglist.data.remote
 
-import app.cash.turbine.test
 import com.alancamargo.lystchallenge.features.doglist.data.api.DogService
 import com.alancamargo.lystchallenge.testtools.stubDogList
 import com.alancamargo.lystchallenge.testtools.stubDogResponseList
@@ -24,29 +23,23 @@ class DogRemoteDataSourceImplTest {
         coEvery { mockService.getDogs() } returns stubDogResponseList()
 
         // When
-        val result = remoteDataSource.getDogs()
+        val actual = remoteDataSource.getDogs()
 
         // Then
         val expected = stubDogList()
-        result.test {
-            val actual = awaitItem()
-            assertThat(actual).isEqualTo(expected)
-            awaitComplete()
-        }
+        assertThat(actual).isEqualTo(expected)
     }
 
     @Test
-    fun `when service throws exception getDogs should return error`() = runBlocking {
+    fun `when service throws exception getDogs should throw exception`() {
         // Given
         val message = "Someone on the backend did an oopsie"
         coEvery { mockService.getDogs() } throws IOException(message)
 
-        // When
-        val result = remoteDataSource.getDogs()
-
         // Then
-        result.test {
-            val exception = awaitError()
+        try {
+            runBlocking { remoteDataSource.getDogs() }
+        } catch (exception: IOException) {
             assertThat(exception).isInstanceOf(IOException::class.java)
             assertThat(exception).hasMessageThat().isEqualTo(message)
         }

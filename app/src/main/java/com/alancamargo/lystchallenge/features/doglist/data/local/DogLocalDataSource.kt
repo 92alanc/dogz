@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface DogLocalDataSource {
 
-    fun getDogs(): Flow<List<Dog>>
+    suspend fun getDogs(): List<Dog>
 
-    fun saveDogs(dogs: List<Dog>): Flow<Unit>
+    suspend fun saveDogs(dogs: List<Dog>)
 
     fun clearCache(): Flow<Unit>
 

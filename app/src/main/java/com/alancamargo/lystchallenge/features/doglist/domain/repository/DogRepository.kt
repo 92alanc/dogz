@@ -7,4 +7,6 @@ interface DogRepository {
 
     fun getDogs(): Flow<List<Dog>>
 
+    fun clearCache(): Flow<Unit>
+
 }

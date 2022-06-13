@@ -26,30 +26,23 @@ class DogLocalDataSourceImplTest {
         coEvery { mockDatabase.getDogs() } returns stubDbDogList()
 
         // When
-        val result = localDataSource.getDogs()
+        val actual = runBlocking { localDataSource.getDogs() }
 
         // Then
         val expected = stubDogList()
-        result.test {
-            val actual = awaitItem()
-            assertThat(actual).isEqualTo(expected)
-            awaitComplete()
-        }
+        assertThat(actual).isEqualTo(expected)
     }
 
     @Test
-    fun `when database throws exception getDogs should return error`() = runBlocking {
+    fun `when database throws exception getDogs should throw exception`() {
         // Given
         val message = "This database sucks"
         coEvery { mockDatabase.getDogs() } throws IOException(message)
 
-        // When
-        val result = localDataSource.getDogs()
-
         // Then
-        result.test {
-            val exception = awaitError()
-            assertThat(exception).isInstanceOf(IOException::class.java)
+        try {
+            runBlocking { localDataSource.getDogs() }
+        } catch (exception: IOException) {
             assertThat(exception).hasMessageThat().isEqualTo(message)
         }
     }
@@ -61,14 +54,9 @@ class DogLocalDataSourceImplTest {
         val dogs = stubDogList()
 
         // When
-        val result = localDataSource.saveDogs(dogs)
+        localDataSource.saveDogs(dogs)
 
         // Then
-        result.test {
-            awaitItem()
-            awaitComplete()
-        }
-
         coVerify(exactly = dogs.size) { mockDatabase.getDog(id = any()) }
         coVerify(exactly = dogs.size) { mockDatabase.updateDog(dog = any()) }
         coVerify(exactly = 0) { mockDatabase.insertDog(dog = any()) }
@@ -81,33 +69,25 @@ class DogLocalDataSourceImplTest {
         val dogs = stubDogList()
 
         // When
-        val result = localDataSource.saveDogs(dogs)
+        localDataSource.saveDogs(dogs)
 
         // Then
-        result.test {
-            awaitItem()
-            awaitComplete()
-        }
-
         coVerify(exactly = dogs.size) { mockDatabase.getDog(id = any()) }
         coVerify(exactly = dogs.size) { mockDatabase.insertDog(dog = any()) }
         coVerify(exactly = 0) { mockDatabase.updateDog(dog = any()) }
     }
 
     @Test
-    fun `when database throws exception saveDogs should return error`() = runBlocking {
+    fun `when database throws exception saveDogs should throw exception`() = runBlocking {
         // Given
         val message = "Don't even look at me that way, I'm just the bearer of the bad news"
         coEvery { mockDatabase.getDog(id = any()) } throws IllegalStateException(message)
         val dogs = stubDogList()
 
-        // When
-        val result = localDataSource.saveDogs(dogs)
-
         // Then
-        result.test {
-            val exception = awaitError()
-            assertThat(exception).isInstanceOf(IllegalStateException::class.java)
+        try {
+            localDataSource.saveDogs(dogs)
+        } catch (exception: IllegalStateException) {
             assertThat(exception).hasMessageThat().isEqualTo(message)
         }
     }
