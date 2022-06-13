@@ -2,6 +2,7 @@ package com.alancamargo.lystchallenge.core.tools
 
 import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
+import com.alancamargo.lystchallenge.core.arch.viewmodel.StateViewModel
 import com.alancamargo.lystchallenge.core.arch.viewmodel.UiAction
 import com.alancamargo.lystchallenge.core.arch.viewmodel.UiState
 import com.alancamargo.lystchallenge.core.arch.viewmodel.ViewModel
@@ -21,6 +22,15 @@ fun <S : UiState, A : UiAction> AppCompatActivity.observeAction(
 ) {
     viewModel.action.observe(this) { action ->
         onAction(action)
+    }
+}
+
+fun <S : UiState> AppCompatActivity.observeState(
+    viewModel: StateViewModel<S>,
+    onStateChanged: (S) -> Unit
+) {
+    viewModel.state.observe(this) { state ->
+        onStateChanged(state)
     }
 }
 
