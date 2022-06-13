@@ -1,5 +1,7 @@
 package com.alancamargo.lystchallenge.testtools
 
+import com.alancamargo.lystchallenge.features.doglist.data.mapping.toDb
+import com.alancamargo.lystchallenge.features.doglist.data.model.DbDog
 import com.alancamargo.lystchallenge.features.doglist.data.model.DogResponse
 import com.alancamargo.lystchallenge.features.doglist.data.model.ImageResponse
 import com.alancamargo.lystchallenge.features.doglist.domain.mapping.toUi
@@ -46,7 +48,18 @@ fun stubDogResponseList() = listOf(
 
 fun stubUiDogList() = stubDogList().map { it.toUi() }
 
+fun stubDbDogList() = stubDogList().map { it.toDb() }
+
 fun stubUiDog() = UiDog(
+    id = "456",
+    breed = "Pinscher",
+    imageUrl = "https://test.com/pinscher.png",
+    temperament = "Very cocky, especially around huge dogs that could easily tear them apart",
+    origin = "Gated communities, inside posh women's purses, etc.",
+    wikipediaUrl = "https://fakepedia.com/pinscher"
+)
+
+fun stubDbDog() = DbDog(
     id = "456",
     breed = "Pinscher",
     imageUrl = "https://test.com/pinscher.png",

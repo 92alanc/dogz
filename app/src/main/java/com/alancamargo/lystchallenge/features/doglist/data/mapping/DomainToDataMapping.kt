@@ -1,19 +1,9 @@
 package com.alancamargo.lystchallenge.features.doglist.data.mapping
 
 import com.alancamargo.lystchallenge.features.doglist.data.model.DbDog
-import com.alancamargo.lystchallenge.features.doglist.data.model.DogResponse
 import com.alancamargo.lystchallenge.features.doglist.domain.model.Dog
 
-fun DogResponse.toDomain() = Dog(
-    id = id.toString(),
-    breed = breed,
-    imageUrl = image.url,
-    temperament = temperament.orEmpty(),
-    origin = origin.orEmpty(),
-    wikipediaUrl = wikipediaUrl.orEmpty()
-)
-
-fun DbDog.toDomain() = Dog(
+fun Dog.toDb() = DbDog(
     id = id,
     breed = breed,
     imageUrl = imageUrl,
