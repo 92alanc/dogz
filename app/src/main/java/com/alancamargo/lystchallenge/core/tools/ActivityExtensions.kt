@@ -1,5 +1,6 @@
 package com.alancamargo.lystchallenge.core.tools
 
+import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
 import com.alancamargo.lystchallenge.core.arch.viewmodel.UiAction
 import com.alancamargo.lystchallenge.core.arch.viewmodel.UiState
@@ -21,4 +22,8 @@ fun <S : UiState, A : UiAction> AppCompatActivity.observeAction(
     viewModel.action.observe(this) { action ->
         onAction(action)
     }
+}
+
+fun <T : Parcelable> AppCompatActivity.args() = lazy {
+    intent.getParcelableExtra(EXTRA_ARGUMENTS) as? T ?: throw IllegalStateException("Missing args!")
 }

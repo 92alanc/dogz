@@ -1,7 +1,6 @@
 package com.alancamargo.lystchallenge.features.doglist.ui
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.alancamargo.lystchallenge.R
 import com.alancamargo.lystchallenge.core.tools.observeAction
@@ -12,7 +11,9 @@ import com.alancamargo.lystchallenge.features.doglist.ui.model.UiDog
 import com.alancamargo.lystchallenge.features.doglist.ui.viewmodel.DogListUiAction
 import com.alancamargo.lystchallenge.features.doglist.ui.viewmodel.DogListUiState
 import com.alancamargo.lystchallenge.features.doglist.ui.viewmodel.DogListViewModel
+import com.alancamargo.lystchallenge.navigation.DogDetailsActivityNavigation
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.koin.android.ext.android.get
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DogListActivity : AppCompatActivity() {
@@ -70,8 +71,8 @@ class DogListActivity : AppCompatActivity() {
     }
 
     private fun openDogDetails(dog: UiDog) {
-        // TODO
-        Toast.makeText(this, dog.breed, Toast.LENGTH_SHORT).show()
+        val navigation = get<DogDetailsActivityNavigation>()
+        navigation.startActivity(context = this, dog = dog)
     }
 
 }
