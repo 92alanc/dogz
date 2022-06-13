@@ -10,6 +10,7 @@ import com.alancamargo.lystchallenge.features.doglist.data.remote.DogRemoteDataS
 import com.alancamargo.lystchallenge.features.doglist.data.remote.DogRemoteDataSourceImpl
 import com.alancamargo.lystchallenge.features.doglist.data.repository.DogRepositoryImpl
 import com.alancamargo.lystchallenge.features.doglist.domain.repository.DogRepository
+import com.alancamargo.lystchallenge.features.doglist.domain.usecase.ClearCacheUseCase
 import com.alancamargo.lystchallenge.features.doglist.domain.usecase.GetDogsUseCase
 import com.alancamargo.lystchallenge.features.doglist.ui.viewmodel.DogListViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -19,6 +20,7 @@ class DogListModule : FeatureModule() {
 
     override val domain = module {
         factory { GetDogsUseCase(repository = get()) }
+        factory { ClearCacheUseCase(repository = get()) }
         factory<DogRepository> {
             DogRepositoryImpl(
                 remoteDataSource = get(),
