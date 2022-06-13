@@ -1,6 +1,8 @@
 package com.alancamargo.lystchallenge.features.doglist.ui
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.alancamargo.lystchallenge.R
 import com.alancamargo.lystchallenge.core.tools.DialogueHelper
@@ -35,6 +37,22 @@ class DogListActivity : AppCompatActivity() {
         setUpUi()
         observeViewModel()
         viewModel.loadDogs()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_dog_list, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.itemClearCache -> {
+                viewModel.onClearCacheClicked()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun setUpUi() {

@@ -5,4 +5,5 @@
     <string name="ok">OK</string>
     <string name="cache_cleared">Cache cleared</string>
     <string name="error_clearing_cache">Error clearing cache</string>
+    <string name="clear_cache">Clear cache</string>
 </resources>
