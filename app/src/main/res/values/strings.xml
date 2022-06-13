@@ -6,4 +6,6 @@
     <string name="cache_cleared">Cache cleared</string>
     <string name="error_clearing_cache">Error clearing cache</string>
     <string name="clear_cache">Clear cache</string>
+    <string name="temperament">Temperament</string>
+    <string name="origin">Origin</string>
 </resources>

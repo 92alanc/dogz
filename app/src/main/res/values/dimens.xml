@@ -3,6 +3,7 @@
     <dimen name="spacing_00">4dp</dimen>
     <dimen name="spacing_01">8dp</dimen>
     <dimen name="spacing_02">16dp</dimen>
+    <dimen name="spacing_03">28dp</dimen>
 
     <dimen name="card_photo_size">60dp</dimen>
 </resources>
