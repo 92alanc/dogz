@@ -16,6 +16,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Rule
@@ -31,6 +32,7 @@ class DogListViewModelTest {
     private val mockGetDogsUseCase = mockk<GetDogsUseCase>()
     private val mockClearCacheUseCase = mockk<ClearCacheUseCase>()
     private val mockErrorLogger = mockk<ErrorLogger>(relaxed = true)
+    private val scheduler = TestCoroutineScheduler()
 
     private val mockStateObserver = mockk<Observer<DogListUiState>>(relaxed = true)
     private val mockActionObserver = mockk<Observer<DogListUiAction>>(relaxed = true)
@@ -39,7 +41,7 @@ class DogListViewModelTest {
 
     @Before
     fun setUp() {
-        val testDispatcher = StandardTestDispatcher()
+        val testDispatcher = StandardTestDispatcher(scheduler)
         Dispatchers.setMain(testDispatcher)
 
         viewModel = DogListViewModel(
@@ -62,6 +64,7 @@ class DogListViewModelTest {
         viewModel.loadDogs()
 
         // Then
+        scheduler.advanceTimeBy(delayTimeMillis = 10)
         verify { mockActionObserver.onChanged(DogListUiAction.ShowLoading) }
     }
 
@@ -75,6 +78,7 @@ class DogListViewModelTest {
 
         // Then
         val expected = stubUiDogList()
+        scheduler.advanceTimeBy(delayTimeMillis = 10)
         verify { mockStateObserver.onChanged(DogListUiState(expected)) }
     }
 
@@ -87,20 +91,21 @@ class DogListViewModelTest {
         viewModel.loadDogs()
 
         // Then
+        scheduler.advanceTimeBy(delayTimeMillis = 10)
         verify { mockActionObserver.onChanged(DogListUiAction.HideLoading) }
     }
 
     @Test
     fun `when use case returns error loadDogs should log error`() {
         // Given
-        val expected = SocketException("Status code: 200")
-        every { mockGetDogsUseCase() } returns flow { throw expected }
+        every { mockGetDogsUseCase() } returns flow { throw SocketException("Status code: 200") }
 
         // When
         viewModel.loadDogs()
 
         // Then
-        verify { mockErrorLogger.log(expected) }
+        scheduler.advanceTimeBy(delayTimeMillis = 10)
+        verify { mockErrorLogger.log(any<SocketException>()) }
     }
 
     @Test
@@ -112,6 +117,7 @@ class DogListViewModelTest {
         viewModel.loadDogs()
 
         // Then
+        scheduler.advanceTimeBy(delayTimeMillis = 10)
         verify { mockActionObserver.onChanged(DogListUiAction.ShowError) }
     }
 
@@ -124,6 +130,7 @@ class DogListViewModelTest {
         viewModel.loadDogs()
 
         // Then
+        scheduler.advanceTimeBy(delayTimeMillis = 10)
         verify { mockActionObserver.onChanged(DogListUiAction.HideLoading) }
     }
 
@@ -148,6 +155,7 @@ class DogListViewModelTest {
         viewModel.onClearCacheClicked()
 
         // Then
+        scheduler.advanceTimeBy(delayTimeMillis = 10)
         verify { mockActionObserver.onChanged(DogListUiAction.NotifyCacheCleared) }
     }
 
@@ -160,20 +168,21 @@ class DogListViewModelTest {
         viewModel.onClearCacheClicked()
 
         // Then
+        scheduler.advanceTimeBy(delayTimeMillis = 10)
         verify { mockActionObserver.onChanged(DogListUiAction.ShowClearCacheError) }
     }
 
     @Test
     fun `when cache is not cleared onClearCacheClicked should log error`() {
         // Given
-        val exception = IllegalStateException()
-        every { mockClearCacheUseCase() } returns flow { throw exception }
+        every { mockClearCacheUseCase() } returns flow { throw IllegalStateException() }
 
         // When
         viewModel.onClearCacheClicked()
 
         // Then
-        verify { mockErrorLogger.log(exception) }
+        scheduler.advanceTimeBy(delayTimeMillis = 10)
+        verify { mockErrorLogger.log(any<IllegalStateException>()) }
     }
 
 }
