@@ -3,4 +3,6 @@
     <string name="error_title">Error</string>
     <string name="error_message">Error loading data. Please try again later</string>
     <string name="ok">OK</string>
+    <string name="cache_cleared">Cache cleared</string>
+    <string name="error_clearing_cache">Error clearing cache</string>
 </resources>

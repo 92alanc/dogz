@@ -3,6 +3,8 @@ package com.alancamargo.lystchallenge.features.doglist.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.alancamargo.lystchallenge.R
+import com.alancamargo.lystchallenge.core.tools.DialogueHelper
+import com.alancamargo.lystchallenge.core.tools.ToastHelper
 import com.alancamargo.lystchallenge.core.tools.observeAction
 import com.alancamargo.lystchallenge.core.tools.observeState
 import com.alancamargo.lystchallenge.databinding.ActivityDogListBinding
@@ -12,8 +14,8 @@ import com.alancamargo.lystchallenge.features.doglist.ui.viewmodel.DogListUiActi
 import com.alancamargo.lystchallenge.features.doglist.ui.viewmodel.DogListUiState
 import com.alancamargo.lystchallenge.features.doglist.ui.viewmodel.DogListViewModel
 import com.alancamargo.lystchallenge.navigation.DogDetailsActivityNavigation
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DogListActivity : AppCompatActivity() {
@@ -23,6 +25,7 @@ class DogListActivity : AppCompatActivity() {
 
     private val adapter by lazy { DogAdapter(viewModel::onDogClicked) }
     private val viewModel by viewModel<DogListViewModel>()
+    private val toastHelper by inject<ToastHelper>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,20 +62,32 @@ class DogListActivity : AppCompatActivity() {
             is DogListUiAction.HideLoading -> binding.swipeRefreshLayout.isRefreshing = false
             is DogListUiAction.ShowError -> showError()
             is DogListUiAction.OpenDogDetails -> openDogDetails(action.dog)
+            is DogListUiAction.NotifyCacheCleared -> notifyCacheCleared()
+            is DogListUiAction.ShowClearCacheError -> showClearCacheError()
         }
     }
 
     private fun showError() {
-        MaterialAlertDialogBuilder(this).setTitle(R.string.error_title)
-            .setMessage(R.string.error_message)
-            .setIcon(R.drawable.ic_error)
-            .setNeutralButton(R.string.ok, null)
-            .show()
+        val dialogueHelper = get<DialogueHelper>()
+        dialogueHelper.showNeutralDialogue(
+            titleRes = R.string.error_title,
+            messageRes = R.string.error_message,
+            dismissButtonTextRes = R.string.ok,
+            iconRes = R.drawable.ic_error
+        )
     }
 
     private fun openDogDetails(dog: UiDog) {
         val navigation = get<DogDetailsActivityNavigation>()
         navigation.startActivity(context = this, dog = dog)
+    }
+
+    private fun notifyCacheCleared() {
+        toastHelper.showToast(R.string.cache_cleared)
+    }
+
+    private fun showClearCacheError() {
+        toastHelper.showToast(R.string.error_clearing_cache)
     }
 
 }
