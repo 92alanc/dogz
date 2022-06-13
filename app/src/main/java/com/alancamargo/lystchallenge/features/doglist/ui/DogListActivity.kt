@@ -3,6 +3,7 @@ package com.alancamargo.lystchallenge.features.doglist.ui
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.alancamargo.lystchallenge.R
 import com.alancamargo.lystchallenge.core.tools.observeAction
 import com.alancamargo.lystchallenge.core.tools.observeState
 import com.alancamargo.lystchallenge.databinding.ActivityDogListBinding
@@ -11,6 +12,7 @@ import com.alancamargo.lystchallenge.features.doglist.ui.model.UiDog
 import com.alancamargo.lystchallenge.features.doglist.ui.viewmodel.DogListUiAction
 import com.alancamargo.lystchallenge.features.doglist.ui.viewmodel.DogListUiState
 import com.alancamargo.lystchallenge.features.doglist.ui.viewmodel.DogListViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DogListActivity : AppCompatActivity() {
@@ -60,7 +62,11 @@ class DogListActivity : AppCompatActivity() {
     }
 
     private fun showError() {
-        // TODO
+        MaterialAlertDialogBuilder(this).setTitle(R.string.error_title)
+            .setMessage(R.string.error_message)
+            .setIcon(R.drawable.ic_error)
+            .setNeutralButton(R.string.ok, null)
+            .show()
     }
 
     private fun openDogDetails(dog: UiDog) {
