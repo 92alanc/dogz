@@ -3,6 +3,7 @@ package com.alancamargo.lystchallenge.features.doglist.ui.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.alancamargo.lystchallenge.core.tools.ErrorLogger
+import com.alancamargo.lystchallenge.features.doglist.domain.usecase.ClearCacheUseCase
 import com.alancamargo.lystchallenge.features.doglist.domain.usecase.GetDogsUseCase
 import com.alancamargo.lystchallenge.testtools.stubDogList
 import com.alancamargo.lystchallenge.testtools.stubUiDog
@@ -28,6 +29,7 @@ class DogListViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val mockGetDogsUseCase = mockk<GetDogsUseCase>()
+    private val mockClearCacheUseCase = mockk<ClearCacheUseCase>()
     private val mockErrorLogger = mockk<ErrorLogger>(relaxed = true)
 
     private val mockStateObserver = mockk<Observer<DogListUiState>>(relaxed = true)
@@ -42,6 +44,7 @@ class DogListViewModelTest {
 
         viewModel = DogListViewModel(
             mockGetDogsUseCase,
+            mockClearCacheUseCase,
             mockErrorLogger,
             testDispatcher
         ).apply {
@@ -134,6 +137,43 @@ class DogListViewModelTest {
 
         // Then
         verify { mockActionObserver.onChanged(DogListUiAction.OpenDogDetails(expected)) }
+    }
+
+    @Test
+    fun `when cache is cleared onClearCacheClicked should send NotifyCacheCleared action`() {
+        // Given
+        every { mockClearCacheUseCase() } returns flowOf(Unit)
+
+        // When
+        viewModel.onClearCacheClicked()
+
+        // Then
+        verify { mockActionObserver.onChanged(DogListUiAction.NotifyCacheCleared) }
+    }
+
+    @Test
+    fun `when cache is not cleared onClearCacheClicked should send ShowClearCacheError action`() {
+        // Given
+        every { mockClearCacheUseCase() } returns flow { throw Throwable() }
+
+        // When
+        viewModel.onClearCacheClicked()
+
+        // Then
+        verify { mockActionObserver.onChanged(DogListUiAction.ShowClearCacheError) }
+    }
+
+    @Test
+    fun `when cache is not cleared onClearCacheClicked should log error`() {
+        // Given
+        val exception = IllegalStateException()
+        every { mockClearCacheUseCase() } returns flow { throw exception }
+
+        // When
+        viewModel.onClearCacheClicked()
+
+        // Then
+        verify { mockErrorLogger.log(exception) }
     }
 
 }

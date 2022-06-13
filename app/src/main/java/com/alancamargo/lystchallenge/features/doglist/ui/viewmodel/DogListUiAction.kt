@@ -13,4 +13,8 @@ sealed class DogListUiAction : UiAction {
 
     data class OpenDogDetails(val dog: UiDog) : DogListUiAction()
 
+    object NotifyCacheCleared : DogListUiAction()
+
+    object ShowClearCacheError : DogListUiAction()
+
 }

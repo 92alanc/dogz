@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.alancamargo.lystchallenge.core.arch.viewmodel.ViewModel
 import com.alancamargo.lystchallenge.core.tools.ErrorLogger
 import com.alancamargo.lystchallenge.features.doglist.domain.mapping.toUi
+import com.alancamargo.lystchallenge.features.doglist.domain.usecase.ClearCacheUseCase
 import com.alancamargo.lystchallenge.features.doglist.domain.usecase.GetDogsUseCase
 import com.alancamargo.lystchallenge.features.doglist.ui.model.UiDog
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 
 class DogListViewModel(
     private val getDogsUseCase: GetDogsUseCase,
+    private val clearCacheUseCase: ClearCacheUseCase,
     private val errorLogger: ErrorLogger,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel<DogListUiState, DogListUiAction>(initialState = DogListUiState()) {
@@ -38,6 +40,17 @@ class DogListViewModel(
 
     fun onDogClicked(dog: UiDog) {
         sendAction { DogListUiAction.OpenDogDetails(dog) }
+    }
+
+    fun onClearCacheClicked() {
+        viewModelScope.launch {
+            clearCacheUseCase().flowOn(dispatcher).catch { throwable ->
+                errorLogger.log(throwable)
+                sendAction { DogListUiAction.ShowClearCacheError }
+            }.collect {
+                sendAction { DogListUiAction.NotifyCacheCleared }
+            }
+        }
     }
 
 }

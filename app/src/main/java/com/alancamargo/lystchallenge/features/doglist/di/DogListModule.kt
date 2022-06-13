@@ -37,7 +37,13 @@ class DogListModule : FeatureModule() {
     }
 
     override val ui = module {
-        viewModel { DogListViewModel(getDogsUseCase = get(), errorLogger = get()) }
+        viewModel {
+            DogListViewModel(
+                getDogsUseCase = get(),
+                clearCacheUseCase = get(),
+                errorLogger = get()
+            )
+        }
     }
 
 }
